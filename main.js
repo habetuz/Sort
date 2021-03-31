@@ -37,7 +37,7 @@ function bubbleSortAlgorithm(values) {
             }
         }
     }
-    bubbleSort.svg.size(bubbleSort.items.length*100+30, "100%")
+    bubbleSort.svg.size((bubbleSort.items.length-1)*100+60, "100%")
 }
 
 bubbleSortAlgorithm(TEMPLATE)
