@@ -44,7 +44,7 @@ h2 {
     color: #F5F6F7;
 }
 
-.container {
+.outer-container {
     margin: auto;
     padding: 25px;
     width: calc(100% - 200px);
@@ -54,11 +54,15 @@ h2 {
     margin-top: 50px;
 }
 
-.sort-container {
+.inner-container {
+    overflow-y: hidden;
+    overflow-x: scroll;
     margin-top: 25px;
-    width: calc(100%-50px);
-    height: 300px;
     background-color: #121414;
     border-radius: 25px;
     box-shadow: inset 0px 0px 20px #000000;
 }
+
+.scrollable-element {
+    scrollbar-color: dark;
+  }
