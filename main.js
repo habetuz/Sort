@@ -81,13 +81,17 @@ function insertSortAlgorithm(values) {
     insertSort.items = []
     publish(copyArray(values), insertSort)
     for(let i = 1; i < values.length; i++) {
-        for(let j = i; j > 0 && values[j-1].value > values[j].value; j--) {
-            let swap = values[j]
-            values[j] = values[j-1]
-            values[j-1] = swap
+        for(let j = 0; j < i; j++) {
+            if(values[j].value > values[i].value) {
+                let swap = values[i]
+                for (let k = i; k > j; k--) {
+                    values[k] = values[k-1]
+                }
+                values[j] = swap
+            }
             let copy = copyArray(values)
+            copy[i].gotCompared = true
             copy[j].gotCompared = true
-            copy[j-1].gotCompared = true
             publish(copy, insertSort)
         }
     }
@@ -246,7 +250,7 @@ function publish(array, target, extras) {
                 .line(
                     (target.step-1)*100 + 30,   j*40 + 30, 
                     target.step*100 + 30,       i*40 + 30)
-                .stroke("#F5F6F7"/*mapColor(element.value, getMax(array))*/)
+                .stroke({color: "#F5F6F7", width: 2}/*mapColor(element.value, getMax(array))*/)
                 .id(target.idPrefix + (target.step -1) + "-" + j + "---" + target.step + "-" + i)
         }
     }
