@@ -37,7 +37,8 @@ var runMode = runReverse
 var bubbleSort = {
     svg: SVG().addTo("#bubble-sort").size("100%","100%"),
     step: 0,
-    items: []
+    items: [],
+    idPrefix: "bubble"
 }
 
 function bubbleSortAlgorithm(values) {
@@ -45,14 +46,17 @@ function bubbleSortAlgorithm(values) {
     bubbleSort.svg.clear()
     bubbleSort.step = 0
     bubbleSort.items = []
-    publish(values.slice(), bubbleSort)
+    publish(copyArray(values), bubbleSort)
     for(let i = 0; i < values.length; i++) {
         for(let j = 0; j < values.length-1-i; j++) {
             if(values[j].value > values[j+1].value) {
                 let swap = values[j]
                 values[j] = values[j+1]
                 values[j+1] = swap
-                publish(values.slice(), bubbleSort)
+                let copy = copyArray(values)
+                copy[j].gotCompared = true
+                copy[j+1].gotCompared = true
+                publish(copy, bubbleSort)
             }
         }
     }
@@ -66,7 +70,8 @@ function bubbleSortAlgorithm(values) {
 var insertSort = {
     svg: SVG().addTo("#insert-sort").size("100%","100%"),
     step: 0,
-    items: []
+    items: [],
+    idPrefix: "insert"
 }
 
 function insertSortAlgorithm(values) {
@@ -74,13 +79,16 @@ function insertSortAlgorithm(values) {
     insertSort.svg.clear()
     insertSort.step = 0
     insertSort.items = []
-    publish(values.slice(), insertSort)
+    publish(copyArray(values), insertSort)
     for(let i = 1; i < values.length; i++) {
         for(let j = i; j > 0 && values[j-1].value > values[j].value; j--) {
             let swap = values[j]
             values[j] = values[j-1]
             values[j-1] = swap
-            publish(values.slice(), insertSort)
+            let copy = copyArray(values)
+            copy[j].gotCompared = true
+            copy[j-1].gotCompared = true
+            publish(copy, insertSort)
         }
     }
     insertSort.svg.size((insertSort.items.length-1)*100+60, "100%")
@@ -90,12 +98,11 @@ function insertSortAlgorithm(values) {
 // Merge-Sort
 //================================================================================
 
-console.log(Math.floor(5/2))
-
 var mergeSort = {
     svg: SVG().addTo("#merge-sort").size("100%","100%"),
     step: 0,
-    items: []
+    items: [],
+    idPrefix: "merge"
 }
 
 function mergeSortAlgorithm(values) {
@@ -103,17 +110,19 @@ function mergeSortAlgorithm(values) {
     mergeSort.svg.clear()
     mergeSort.step = 0
     mergeSort.items = []
-    publish(values.slice(), mergeSort)
+    publish(copyArray(values), mergeSort)
     for (let i = 2; i < values.length*2; i*=2) {
         for (let j = 0; j <= Math.floor((values.length)/i); j++) {
             let a = j*i
             let b = j*i +i/2
             for(let k = j*i; b < j*i+i && b < values.length && a < b; k++) {
                 //console.log("i: " + i + " | j: " + j + " | k: " + k + " | a: " + a + " | b: " + b)
-                let swap
+                let originalA = a
+                let originalB = b
                 if(values[a].value<values[b].value) {
                     a++
                 } else {
+                    let swap
                     swap = values[b]
                     for(let l = b; l > a; l--) {
                         values[l] = values[l-1]
@@ -122,8 +131,12 @@ function mergeSortAlgorithm(values) {
                     a++
                     b++
                     //console.log(values)
-                    publish(values.slice(), mergeSort)
+                    
                 }
+                let copy = copyArray(values)
+                copy[originalA].gotCompared = true
+                copy[originalB].gotCompared = true
+                publish(copy, mergeSort)
                 
             }
         }
@@ -162,14 +175,23 @@ function runReverse() {
 }
 
 function runAlgorithms(array) {
-    bubbleSortAlgorithm(array.slice())
-    insertSortAlgorithm(array.slice())
-    mergeSortAlgorithm(array.slice())
+    bubbleSortAlgorithm(copyArray(array))
+    insertSortAlgorithm(copyArray(array))
+    mergeSortAlgorithm(copyArray(array))
 }
 
 //================================================================================
 // Helper functions
 //================================================================================
+
+function copyArray(array) {
+    let copy = array.slice()
+    for (let i = 0; i < copy.length; i++) {
+        copy[i] = Object.assign({}, array[i])
+        
+    }
+    return copy
+}
 
 function getRandom(max) {
     return Math.floor(Math.random() * max);
@@ -209,8 +231,11 @@ function publish(array, target, extras) {
             .cx(target.step*100 + 30)
             .cy(i*40 + 30)
             .fill(mapColor(element.value, getMax(array)))
+            .id(target.idPrefix + target.step + "-" + i)
         if(target.step == 0) continue
-
+        if(element.gotCompared) {
+            SVG(document.getElementById(target.idPrefix + (target.step-1) + "-" + i)).stroke({ color: "#E8911A", width: 4})
+        }
         //Draw connection line
         let lastArray = target.items[target.step-1]
         for (let j = 0; j < lastArray.length; j++) {
@@ -222,6 +247,7 @@ function publish(array, target, extras) {
                     (target.step-1)*100 + 30,   j*40 + 30, 
                     target.step*100 + 30,       i*40 + 30)
                 .stroke(mapColor(element.value, getMax(array)))
+                .id(target.idPrefix + (target.step -1) + "-" + j + "---" + target.step + "-" + i)
         }
     }
     target.svg
