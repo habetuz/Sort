@@ -53,14 +53,24 @@ function bubbleSortAlgorithm(values) {
                 let swap = values[j]
                 values[j] = values[j+1]
                 values[j+1] = swap
-                let copy = copyArray(values)
-                copy[j].gotCompared = true
-                copy[j+1].gotCompared = true
-                publish(copy, bubbleSort)
+                
             }
+            let copy = copyArray(values)
+            copy[j].gotCompared = true
+            copy[j+1].gotCompared = true
+            publish(copy, bubbleSort, {function: bubbleSortExtra, values: [i]})
         }
     }
+    bubbleSortExtra([values.length-1], bubbleSort)
     bubbleSort.svg.size((bubbleSort.items.length-1)*100+60, "100%")
+}
+
+function bubbleSortExtra(values, target) {
+    if(values[0] > 0) target.svg.rect(100, (values[0])*40)
+        .cx((target.step-1)*100 + 30)
+        .y(((itemCount+1)*40+30) - ((values[0]+1.5)*40))
+        .fill("#546653")
+        .back()
 }
 
 //================================================================================
@@ -223,6 +233,7 @@ function mapColor(value, localMax) {
 
 function publish(array, target, extras) {
     target.items.push(array)
+    if(extras != null) extras.function(extras.values, target)
     for (let i = 0; i < array.length; i++) {
         const element = array[i];
         target.svg
