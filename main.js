@@ -5,17 +5,18 @@ import {SVG} from './svg.js'
 //================================================================================
 
 const TEMPLATE = [
-    {value: 9, compared: true},
-    {value: 4, compared: true},
-    {value: 6, compared: false},
+    {value: 6, compared: true},
+    {value: 5, compared: true},
+    {value: 4, compared: false},
+    {value: 3, compared: false},
     {value: 2, compared: false},
     {value: 1, compared: false},
-    {value: 0, compared: false},
+    {value: 0, compared: false}
 ]
 
 const MIN_CRICLE_SIZE = 5
 const MAX_CRICLE_SIZE = 30
-const ITEM_COUNT = 6
+const ITEM_COUNT = 7
 
 //================================================================================
 // Bubble-Sort
@@ -69,6 +70,8 @@ function insertSortAlgorithm(values) {
 // Execution
 //================================================================================
 
+console.log(mapColor(10, 10))
+
 bubbleSortAlgorithm(TEMPLATE.slice())
 insertSortAlgorithm(TEMPLATE.slice())
 
@@ -88,6 +91,14 @@ function getMax(array) {
     return m
 }
 
+function mapColor(value, localMax) {
+    var rValue = map(value, 0, 255, localMax)
+    var gValue = 70
+    var bValue = 255-rValue
+    return new SVG.Color({r: rValue, g: gValue, b: bValue})
+    //return "rgb(" + rValue + ", " + gValue + ", " + bValue + ")"
+}
+
 function publish(array, target, extras) {
     target.items.push(array)
     for (let i = 0; i < array.length; i++) {
@@ -101,7 +112,7 @@ function publish(array, target, extras) {
                     getMax(array)))
             .cx(target.step*100 + 30)
             .cy(i*40 + 30)
-            .fill("#ffffff")
+            .fill(mapColor(element.value, getMax(array)))
         if(target.step == 0) continue
 
         //Draw connection line
@@ -114,9 +125,14 @@ function publish(array, target, extras) {
                 .line(
                     (target.step-1)*100 + 30,   j*40 + 30, 
                     target.step*100 + 30,       i*40 + 30)
-                .stroke("#ffffff")
+                .stroke(mapColor(element.value, getMax(array)))
         }
     }
-    target.svg.text(target.step+"").cx(target.step*100 + 30).cy(ITEM_COUNT*40+30).font("family","Montserrat").fill("#ffffff")
+    target.svg
+        .text(target.step+"")
+        .cx(target.step*100 + 30)
+        .cy(ITEM_COUNT*40+30)
+        .font("family","Montserrat")
+        .fill("#F5F6F7")
     target.step ++
 }
