@@ -1,5 +1,8 @@
 import {SVG} from './svg.js'
 
+//================================================================================
+// Constants
+//================================================================================
 
 const TEMPLATE = [
     {value: 9, compared: true},
@@ -10,13 +13,13 @@ const TEMPLATE = [
     {value: 0, compared: false},
 ]
 
-var max = getMax(TEMPLATE)
-
 const MIN_CRICLE_SIZE = 5
 const MAX_CRICLE_SIZE = 30
 const ITEM_COUNT = 6
 
-
+//================================================================================
+// Bubble-Sort
+//================================================================================
 
 var bubbleSort = {
     svg: SVG().addTo("#bubble-sort").size("100%","100%"),
@@ -40,7 +43,15 @@ function bubbleSortAlgorithm(values) {
     bubbleSort.svg.size((bubbleSort.items.length-1)*100+60, "100%")
 }
 
+//================================================================================
+// Execution
+//================================================================================
+
 bubbleSortAlgorithm(TEMPLATE)
+
+//================================================================================
+// Helper functions
+//================================================================================
 
 function map(value, min, max, localMax) {
     return ((max-min)/localMax) * value + min
