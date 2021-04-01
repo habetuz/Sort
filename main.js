@@ -230,7 +230,7 @@ function publish(array, target, extras) {
                     getMax(array)))
             .cx(target.step*100 + 30)
             .cy(i*40 + 30)
-            .fill(mapColor(element.value, getMax(array)))
+            .fill("#F5F6F7"/*mapColor(element.value, getMax(array))*/)
             .id(target.idPrefix + target.step + "-" + i)
         if(target.step == 0) continue
         if(element.gotCompared) {
@@ -246,7 +246,7 @@ function publish(array, target, extras) {
                 .line(
                     (target.step-1)*100 + 30,   j*40 + 30, 
                     target.step*100 + 30,       i*40 + 30)
-                .stroke(mapColor(element.value, getMax(array)))
+                .stroke("#F5F6F7"/*mapColor(element.value, getMax(array))*/)
                 .id(target.idPrefix + (target.step -1) + "-" + j + "---" + target.step + "-" + i)
         }
     }
