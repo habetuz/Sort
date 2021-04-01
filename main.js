@@ -26,10 +26,9 @@ var bubbleSort = {
     step: 0,
     items: []
 }
-document.getElementById("bubble-sort").style.height = (6*40+30) + "px"
+document.getElementById("bubble-sort").style.height = ((ITEM_COUNT+1)*40+30) + "px"
 
 function bubbleSortAlgorithm(values) {
-    console.log("BUBBLE SORT")
     for(var i = 0; i < values.length; i++) {
         for(var j = 0; j < values.length-1-i; j++) {
             if(values[j].value > values[j+1].value) {
@@ -44,10 +43,34 @@ function bubbleSortAlgorithm(values) {
 }
 
 //================================================================================
+// Insert-Sort
+//================================================================================
+
+var insertSort = {
+    svg: SVG().addTo("#insert-sort").size("100%","100%"),
+    step: 0,
+    items: []
+}
+document.getElementById("insert-sort").style.height = ((ITEM_COUNT+1)*40+30) + "px"
+
+function insertSortAlgorithm(values) {
+    for(var i = 1; i < values.length; i++) {
+        for(var j = i; j > 0 && values[j-1].value > values[j].value; j--) {
+            var swap = values[j]
+            values[j] = values[j-1]
+            values[j-1] = swap
+            publish(values.slice(), insertSort)
+        }
+    }
+    insertSort.svg.size((insertSort.items.length-1)*100+60, "100%")
+}
+
+//================================================================================
 // Execution
 //================================================================================
 
-bubbleSortAlgorithm(TEMPLATE)
+bubbleSortAlgorithm(TEMPLATE.slice())
+insertSortAlgorithm(TEMPLATE.slice())
 
 //================================================================================
 // Helper functions
@@ -69,7 +92,16 @@ function publish(array, target, extras) {
     target.items.push(array)
     for (let i = 0; i < array.length; i++) {
         const element = array[i];
-        target.svg.circle(map(element.value, MIN_CRICLE_SIZE, MAX_CRICLE_SIZE, getMax(array))).cx(target.step*100 + 30).cy(i*40 + 30).fill("#ffffff")
+        target.svg
+            .circle(
+                map(
+                    element.value, 
+                    MIN_CRICLE_SIZE, 
+                    MAX_CRICLE_SIZE, 
+                    getMax(array)))
+            .cx(target.step*100 + 30)
+            .cy(i*40 + 30)
+            .fill("#ffffff")
         if(target.step == 0) continue
 
         //Draw connection line
@@ -77,9 +109,14 @@ function publish(array, target, extras) {
         for (let j = 0; j < lastArray.length; j++) {
             const lastElement = lastArray[j];
             if(lastElement.value != element.value) continue
-            console.log("i: " + i + " | j: " + j + " | last: " + lastElement.value + " | current: " + element.value)
-            target.svg.line((target.step-1)*100 + 30, j*40 + 30, target.step*100 + 30, i*40 + 30).stroke("#ffffff")
+            //console.log("i: " + i + " | j: " + j + " | last: " + lastElement.value + " | current: " + element.value)
+            target.svg
+                .line(
+                    (target.step-1)*100 + 30,   j*40 + 30, 
+                    target.step*100 + 30,       i*40 + 30)
+                .stroke("#ffffff")
         }
     }
+    target.svg.text(target.step+"").cx(target.step*100 + 30).cy(ITEM_COUNT*40+30).font("family","Montserrat").fill("#ffffff")
     target.step ++
 }
