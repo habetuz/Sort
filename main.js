@@ -28,7 +28,7 @@ const MIN_CRICLE_SIZE = 5
 const MAX_CRICLE_SIZE = 30
 
 var itemCount = 7
-var runMode = runRandom
+var runMode = runReverse
 
 //================================================================================
 // Bubble-Sort
@@ -46,10 +46,10 @@ function bubbleSortAlgorithm(values) {
     bubbleSort.step = 0
     bubbleSort.items = []
     publish(values.slice(), bubbleSort)
-    for(var i = 0; i < values.length; i++) {
-        for(var j = 0; j < values.length-1-i; j++) {
+    for(let i = 0; i < values.length; i++) {
+        for(let j = 0; j < values.length-1-i; j++) {
             if(values[j].value > values[j+1].value) {
-                var swap = values[j]
+                let swap = values[j]
                 values[j] = values[j+1]
                 values[j+1] = swap
                 publish(values.slice(), bubbleSort)
@@ -75,9 +75,9 @@ function insertSortAlgorithm(values) {
     insertSort.step = 0
     insertSort.items = []
     publish(values.slice(), insertSort)
-    for(var i = 1; i < values.length; i++) {
-        for(var j = i; j > 0 && values[j-1].value > values[j].value; j--) {
-            var swap = values[j]
+    for(let i = 1; i < values.length; i++) {
+        for(let j = i; j > 0 && values[j-1].value > values[j].value; j--) {
+            let swap = values[j]
             values[j] = values[j-1]
             values[j-1] = swap
             publish(values.slice(), insertSort)
@@ -90,19 +90,44 @@ function insertSortAlgorithm(values) {
 // Merge-Sort
 //================================================================================
 
+console.log(Math.floor(5/2))
+
 var mergeSort = {
-    svg: SVG().addTo("#insert-sort").size("100%","100%"),
+    svg: SVG().addTo("#merge-sort").size("100%","100%"),
     step: 0,
     items: []
 }
 
 function mergeSortAlgorithm(values) {
-    document.getElementById("insert-sort").style.height = ((itemCount+1)*40+30) + "px"
+    document.getElementById("merge-sort").style.height = ((itemCount+1)*40+30) + "px"
     mergeSort.svg.clear()
     mergeSort.step = 0
     mergeSort.items = []
     publish(values.slice(), mergeSort)
-    
+    for (let i = 2; i < values.length*2; i*=2) {
+        for (let j = 0; j <= Math.floor((values.length)/i); j++) {
+            let a = j*i
+            let b = j*i +i/2
+            for(let k = j*i; b < j*i+i && b < values.length && a < b; k++) {
+                //console.log("i: " + i + " | j: " + j + " | k: " + k + " | a: " + a + " | b: " + b)
+                let swap
+                if(values[a].value<values[b].value) {
+                    a++
+                } else {
+                    swap = values[b]
+                    for(let l = b; l > a; l--) {
+                        values[l] = values[l-1]
+                    }
+                    values[a] = swap
+                    a++
+                    b++
+                    //console.log(values)
+                    publish(values.slice(), mergeSort)
+                }
+                
+            }
+        }
+    }
     mergeSort.svg.size((mergeSort.items.length-1)*100+60, "100%")
 }
 
@@ -117,9 +142,9 @@ function runAgain() {
 }
 
 function runRandom() {
-    var array = new Array(itemCount)
+    let array = new Array(itemCount)
     for (let i = 0; i < itemCount; i++) {
-        var index
+        let index
         do {
             index = getRandom(itemCount)
         } while(array[index] != null)
@@ -129,7 +154,7 @@ function runRandom() {
 }
 
 function runReverse() {
-    var array = new Array(itemCount)
+    let array = new Array(itemCount)
     for (let i = 0; i < itemCount; i++) {
         array[i] = {value: itemCount-i-1}
     }
@@ -155,7 +180,7 @@ function map(value, min, max, localMax) {
 }
 
 function getMax(array) {
-    var m = 0
+    let m = 0
     array.forEach(element => {
         if(element.value > m) m = element.value
     });
@@ -163,9 +188,9 @@ function getMax(array) {
 }
 
 function mapColor(value, localMax) {
-    var rValue = map(value, 0, 255, localMax)
-    var gValue = 70
-    var bValue = 255-rValue
+    let rValue = map(value, 0, 255, localMax)
+    let gValue = 70
+    let bValue = 255-rValue
     return new SVG.Color({r: rValue, g: gValue, b: bValue})
     //return "rgb(" + rValue + ", " + gValue + ", " + bValue + ")"
 }
@@ -187,7 +212,7 @@ function publish(array, target, extras) {
         if(target.step == 0) continue
 
         //Draw connection line
-        var lastArray = target.items[target.step-1]
+        let lastArray = target.items[target.step-1]
         for (let j = 0; j < lastArray.length; j++) {
             const lastElement = lastArray[j];
             if(lastElement.value != element.value) continue
