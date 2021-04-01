@@ -1,22 +1,34 @@
 import {SVG} from './svg.js'
 
 //================================================================================
-// Constants
+// Event listener
 //================================================================================
+document.getElementById("button-random").addEventListener("click", function() {
+    runMode = runRandom
+    runAgain()
+})
+document.getElementById("button-reverse").addEventListener("click", function() {
+    runMode = runReverse
+    runAgain()
+})
+document.getElementById("button-addone").addEventListener("click", function() {
+    itemCount ++
+    runAgain()
+})
+document.getElementById("button-subtractone").addEventListener("click", function() {
+    itemCount--
+    runAgain()
+})
 
-const TEMPLATE = [
-    {value: 6, compared: true},
-    {value: 5, compared: true},
-    {value: 4, compared: false},
-    {value: 3, compared: false},
-    {value: 2, compared: false},
-    {value: 1, compared: false},
-    {value: 0, compared: false}
-]
+//================================================================================
+// Constants and values
+//================================================================================
 
 const MIN_CRICLE_SIZE = 5
 const MAX_CRICLE_SIZE = 30
-const ITEM_COUNT = 7
+
+var itemCount = 7
+var runMode = runRandom
 
 //================================================================================
 // Bubble-Sort
@@ -27,9 +39,13 @@ var bubbleSort = {
     step: 0,
     items: []
 }
-document.getElementById("bubble-sort").style.height = ((ITEM_COUNT+1)*40+30) + "px"
 
 function bubbleSortAlgorithm(values) {
+    document.getElementById("bubble-sort").style.height = ((itemCount+1)*40+30) + "px"
+    bubbleSort.svg.clear()
+    bubbleSort.step = 0
+    bubbleSort.items = []
+    publish(values.slice(), bubbleSort)
     for(var i = 0; i < values.length; i++) {
         for(var j = 0; j < values.length-1-i; j++) {
             if(values[j].value > values[j+1].value) {
@@ -52,9 +68,13 @@ var insertSort = {
     step: 0,
     items: []
 }
-document.getElementById("insert-sort").style.height = ((ITEM_COUNT+1)*40+30) + "px"
 
 function insertSortAlgorithm(values) {
+    document.getElementById("insert-sort").style.height = ((itemCount+1)*40+30) + "px"
+    insertSort.svg.clear()
+    insertSort.step = 0
+    insertSort.items = []
+    publish(values.slice(), insertSort)
     for(var i = 1; i < values.length; i++) {
         for(var j = i; j > 0 && values[j-1].value > values[j].value; j--) {
             var swap = values[j]
@@ -67,17 +87,68 @@ function insertSortAlgorithm(values) {
 }
 
 //================================================================================
+// Merge-Sort
+//================================================================================
+
+var mergeSort = {
+    svg: SVG().addTo("#insert-sort").size("100%","100%"),
+    step: 0,
+    items: []
+}
+
+function mergeSortAlgorithm(values) {
+    document.getElementById("insert-sort").style.height = ((itemCount+1)*40+30) + "px"
+    mergeSort.svg.clear()
+    mergeSort.step = 0
+    mergeSort.items = []
+    publish(values.slice(), mergeSort)
+    
+    mergeSort.svg.size((mergeSort.items.length-1)*100+60, "100%")
+}
+
+//================================================================================
 // Execution
 //================================================================================
 
-console.log(mapColor(10, 10))
+runAgain()
 
-bubbleSortAlgorithm(TEMPLATE.slice())
-insertSortAlgorithm(TEMPLATE.slice())
+function runAgain() {
+    runMode()
+}
+
+function runRandom() {
+    var array = new Array(itemCount)
+    for (let i = 0; i < itemCount; i++) {
+        var index
+        do {
+            index = getRandom(itemCount)
+        } while(array[index] != null)
+        array[index] = {value: i}
+    }
+    runAlgorithms(array)
+}
+
+function runReverse() {
+    var array = new Array(itemCount)
+    for (let i = 0; i < itemCount; i++) {
+        array[i] = {value: itemCount-i-1}
+    }
+    runAlgorithms(array)
+}
+
+function runAlgorithms(array) {
+    bubbleSortAlgorithm(array.slice())
+    insertSortAlgorithm(array.slice())
+    mergeSortAlgorithm(array.slice())
+}
 
 //================================================================================
 // Helper functions
 //================================================================================
+
+function getRandom(max) {
+    return Math.floor(Math.random() * max);
+}
 
 function map(value, min, max, localMax) {
     return ((max-min)/localMax) * value + min
@@ -131,7 +202,7 @@ function publish(array, target, extras) {
     target.svg
         .text(target.step+"")
         .cx(target.step*100 + 30)
-        .cy(ITEM_COUNT*40+30)
+        .cy(itemCount*40+30)
         .font("family","Montserrat")
         .fill("#F5F6F7")
     target.step ++
