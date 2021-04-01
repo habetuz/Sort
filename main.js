@@ -102,10 +102,19 @@ function insertSortAlgorithm(values) {
             let copy = copyArray(values)
             copy[i].gotCompared = true
             copy[j].gotCompared = true
-            publish(copy, insertSort)
+            publish(copy, insertSort, {function: insertSortExtra, values: [i]})
         }
     }
+    insertSortExtra([values.length], insertSort)
     insertSort.svg.size((insertSort.items.length-1)*100+60, "100%")
+}
+
+function insertSortExtra(values, target) {
+    if(values[0] > 0) target.svg.rect(100, (values[0])*40 +10)
+        .cx((target.step-1)*100 + 30)
+        .y(0)
+        .fill("#546653")
+        .back()
 }
 
 //================================================================================
