@@ -27,8 +27,8 @@ document.getElementById("button-subtractone").addEventListener("click", function
 const MIN_CRICLE_SIZE = 8
 const MAX_CRICLE_SIZE = 30
 
-var itemCount = 5
-var runMode = runReverse
+var itemCount = 8
+var runMode = runRandom
 
 //================================================================================
 // Bubble-Sort
