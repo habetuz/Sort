@@ -58,17 +58,18 @@ function bubbleSortAlgorithm(values) {
             let copy = copyArray(values)
             copy[j].gotCompared = true
             copy[j+1].gotCompared = true
-            publish(copy, bubbleSort, {function: bubbleSortExtra, values: [i]})
+            bubbleSortDrawFinishedArea(i)
+            publish(copy, bubbleSort)
         }
     }
-    bubbleSortExtra([values.length-1], bubbleSort)
+    bubbleSortDrawFinishedArea(values.length)
     bubbleSort.svg.size((bubbleSort.items.length-1)*100+60, "100%")
 }
 
-function bubbleSortExtra(values, target) {
-    if(values[0] > 0) target.svg.rect(100, (values[0])*40)
-        .cx((target.step-1)*100 + 30)
-        .y(((itemCount+1)*40+30) - ((values[0]+1.5)*40))
+function bubbleSortDrawFinishedArea(i) {
+    if(i > 0) bubbleSort.svg.rect(100, (i)*40)
+        .cx((bubbleSort.step-1)*100 + 30)
+        .y(((itemCount+1)*40+30) - ((i+1.5)*40))
         .fill("#546653")
         .back()
 }
@@ -89,6 +90,7 @@ function insertSortAlgorithm(values) {
     insertSort.svg.clear()
     insertSort.step = 0
     insertSort.items = []
+    insertSortDrawFinishedArea(0)
     publish(copyArray(values), insertSort)
     for(let i = 1; i < values.length; i++) {
         for(let j = 0; j < i; j++) {
@@ -104,17 +106,18 @@ function insertSortAlgorithm(values) {
             let copy = copyArray(values)
             copy[i].gotCompared = true
             copy[j].gotCompared = true
-            publish(copy, insertSort, {function: insertSortExtra, values: [i]})
+            insertSortDrawFinishedArea(i)
+            publish(copy, insertSort)
             if(breakAfter) break
         }
     }
-    insertSortExtra([values.length], insertSort)
+    insertSortDrawFinishedArea(values.length)
     insertSort.svg.size((insertSort.items.length-1)*100+60, "100%")
 }
 
-function insertSortExtra(values, target) {
-    if(values[0] > 0) target.svg.rect(100, (values[0])*40 +10)
-        .cx((target.step-1)*100 + 30)
+function insertSortDrawFinishedArea(i) {
+    insertSort.svg.rect(100, (i+1)*40 +10)
+        .cx((insertSort.step)*100 + 30)
         .y(0)
         .fill("#546653")
         .back()
@@ -137,6 +140,7 @@ function mergeSortAlgorithm(values) {
     mergeSort.step = 0
     mergeSort.items = []
     publish(copyArray(values), mergeSort)
+    mergeSortDrawComparisonArea(2, 0)
     for (let i = 2; i < values.length*2; i*=2) {
         for (let j = 0; j <= Math.floor((values.length)/i); j++) {
             let a = j*i
@@ -163,11 +167,20 @@ function mergeSortAlgorithm(values) {
                 copy[originalA].gotCompared = true
                 copy[originalB].gotCompared = true
                 publish(copy, mergeSort)
-                
+                mergeSortDrawComparisonArea(i, j)
             }
         }
     }
     mergeSort.svg.size((mergeSort.items.length-1)*100+60, "100%")
+}
+
+function mergeSortDrawComparisonArea(i, j) {
+    let startID = i*j
+    let endID = i*(j+1) -1
+    if(endID >= itemCount) endID = itemCount-1
+    let start = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step-1) + "-" + startID))
+    let end = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step-1) + "-" + endID))
+    mergeSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#4d4d4d", width: 35, linecap: "round"}).back()
 }
 
 //================================================================================
@@ -243,9 +256,8 @@ function mapColor(value, localMax) {
     //return "rgb(" + rValue + ", " + gValue + ", " + bValue + ")"
 }
 
-function publish(array, target, extras) {
+function publish(array, target) {
     target.items.push(array)
-    if(extras != null) extras.function(extras.values, target)
     for (let i = 0; i < array.length; i++) {
         const element = array[i];
         target.svg
