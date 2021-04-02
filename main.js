@@ -28,7 +28,7 @@ const MIN_CRICLE_SIZE = 8
 const MAX_CRICLE_SIZE = 30
 
 var itemCount = 5
-var runMode = runRandom
+var runMode = runReverse
 
 //================================================================================
 // Bubble-Sort
@@ -196,6 +196,7 @@ function quickSortAlgorithm(values) {
     quickSort.step = 0
     quickSort.items = []
     let stack = []
+    let finished = []
     stack.push({start: 0, end: values.length-1})
     publish(copyArray(values), quickSort)
     while(stack.length > 0) {
@@ -213,6 +214,7 @@ function quickSortAlgorithm(values) {
             copy[i].gotCompared = true
             copy[element.end-offset].gotCompared = true
             publish(copy, quickSort)
+            quickSortDrawMarker(element, offset, finished)
             if(shifted) {
                 i--
                 offset++
@@ -220,14 +222,35 @@ function quickSortAlgorithm(values) {
         }
         let a = {start: element.start, end: element.end-offset-1}
         let b = {start: element.end-offset+1, end: element.end}
-        if(a.end-a.start > 0) stack.push(a)
-        if(b.end-b.start > 0) stack.push(b)
+        if(a.end-a.start > 0)       stack.push(a) 
+        else if(a.end-a.start == 0) finished.push(a.end) 
+        if(b.end-b.start > 0)       stack.push(b) 
+        else                        finished.push(b.end) 
+        finished.push(element.end-offset)
     }
+    let start = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-1) + "-" + 0))
+    let end = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-1) + "-" + (itemCount-1)))
+    quickSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#546653", width: 50, linecap:  "round"}).back()
     quickSort.svg.size((quickSort.items.length - 1) * 100 + 60, "100%")
 }
 
-function quickSortDrawMarker(element, offset, i) {
+function quickSortDrawMarker(element, offset, finished) {
+    let pivotID = element.end - offset
+    let pivot = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + pivotID))
+    quickSort.svg.circle(50).fill("#383838").cx(pivot.cx()).cy(pivot.cy()).back()
+    
+    let start = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + element.start))
+    let end = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + element.end))
+    quickSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#4d4d4d", width: 50, linecap:  "round"}).back()
 
+    finished.forEach(item => {
+        let finishedStartID = (item-1 >= 0 && item > element.end) ? item-1 : item
+        let finishedEndID = (item+1 < itemCount && item < element.start) ? item+1 : item
+        //console.log("start id: " + finishedStartID + " | end id: " + finishedEndID + " | item: " + item)
+        let finishedStart = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + finishedStartID))
+        let finishedEnd = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + finishedEndID))
+        quickSort.svg.line(finishedStart.cx(), finishedStart.cy(), finishedEnd.cx(), finishedEnd.cy()).stroke({color: "#546653", width: 50, linecap:  "round"}).back()
+    });
 }
 
 //================================================================================
