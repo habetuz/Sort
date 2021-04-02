@@ -65,11 +65,12 @@ function bubbleSortAlgorithm(values) {
 }
 
 function bubbleSortDrawMarker(i) {
-    if (i > 0) bubbleSort.svg.rect(100, (i) * 40)
-        .cx((bubbleSort.step - 1) * 100 + 30)
-        .y(((itemCount + 1) * 40 + 30) - ((i + 1.5) * 40))
-        .fill("#546653")
-        .back()
+    let startID = itemCount-1
+    let endID = itemCount -i
+    if(startID-endID < 0) return
+    let start = SVG(document.getElementById(bubbleSort.idPrefix + (bubbleSort.step - 1) + "-" + startID))
+    let end = SVG(document.getElementById(bubbleSort.idPrefix + (bubbleSort.step - 1) + "-" + endID))
+    bubbleSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
 }
 
 //================================================================================
@@ -174,9 +175,10 @@ function mergeSortDrawMarker(i, j, a) {
     }
     let sortedStartID = i * j
     let sortedEndID = a-1
+    if(sortedEndID-sortedStartID <= 0) return
     let sortedStart = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + sortedStartID))
     let sortedEnd = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + sortedEndID))
-    if(sortedEndID-sortedStartID > 0) mergeSort.svg.line(sortedStart.cx(), sortedStart.cy(), sortedEnd.cx(), sortedEnd.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
+    mergeSort.svg.line(sortedStart.cx(), sortedStart.cy(), sortedEnd.cx(), sortedEnd.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
 }
 
 //================================================================================
