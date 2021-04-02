@@ -244,8 +244,8 @@ function quickSortDrawMarker(element, offset, finished) {
     quickSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#4d4d4d", width: 50, linecap:  "round"}).back()
 
     finished.forEach(item => {
-        let finishedStartID = (item-1 >= 0 && item > element.end) ? item-1 : item
-        let finishedEndID = (item+1 < itemCount && item < element.start) ? item+1 : item
+        let finishedStartID = (item-1 >= 0 && item == element.end+1) || finished.includes(item-1) ? item-1 : item
+        let finishedEndID = (item+1 < itemCount && item == element.start-1) || finished.includes(item+1) ? item+1 : item
         //console.log("start id: " + finishedStartID + " | end id: " + finishedEndID + " | item: " + item)
         let finishedStart = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + finishedStartID))
         let finishedEnd = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + finishedEndID))
