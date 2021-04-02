@@ -140,7 +140,6 @@ function mergeSortAlgorithm(values) {
     mergeSort.step = 0
     mergeSort.items = []
     publish(copyArray(values), mergeSort)
-    mergeSortDrawComparisonArea(2, 0)
     for (let i = 2; i < values.length*2; i*=2) {
         for (let j = 0; j <= Math.floor((values.length)/i); j++) {
             let a = j*i
@@ -166,8 +165,8 @@ function mergeSortAlgorithm(values) {
                 let copy = copyArray(values)
                 copy[originalA].gotCompared = true
                 copy[originalB].gotCompared = true
-                publish(copy, mergeSort)
                 mergeSortDrawComparisonArea(i, j)
+                publish(copy, mergeSort)
             }
         }
     }
