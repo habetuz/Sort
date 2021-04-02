@@ -92,17 +92,20 @@ function insertSortAlgorithm(values) {
     publish(copyArray(values), insertSort)
     for(let i = 1; i < values.length; i++) {
         for(let j = 0; j < i; j++) {
+            let breakAfter = false
             if(values[j].value > values[i].value) {
                 let swap = values[i]
                 for (let k = i; k > j; k--) {
                     values[k] = values[k-1]
                 }
                 values[j] = swap
+                breakAfter = true
             }
             let copy = copyArray(values)
             copy[i].gotCompared = true
             copy[j].gotCompared = true
             publish(copy, insertSort, {function: insertSortExtra, values: [i]})
+            if(breakAfter) break
         }
     }
     insertSortExtra([values.length], insertSort)
