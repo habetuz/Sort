@@ -56,15 +56,15 @@ function bubbleSortAlgorithm(values) {
             let copy = copyArray(values)
             copy[j].gotCompared = true
             copy[j + 1].gotCompared = true
-            bubbleSortDrawFinishedArea(i)
+            bubbleSortDrawMarker(i)
             publish(copy, bubbleSort)
         }
     }
-    bubbleSortDrawFinishedArea(values.length)
+    bubbleSortDrawMarker(values.length)
     bubbleSort.svg.size((bubbleSort.items.length - 1) * 100 + 60, "100%")
 }
 
-function bubbleSortDrawFinishedArea(i) {
+function bubbleSortDrawMarker(i) {
     if (i > 0) bubbleSort.svg.rect(100, (i) * 40)
         .cx((bubbleSort.step - 1) * 100 + 30)
         .y(((itemCount + 1) * 40 + 30) - ((i + 1.5) * 40))
@@ -100,16 +100,16 @@ function insertSortAlgorithm(values) {
             copy[i].gotCompared = true
             copy[j].gotCompared = true
             //console.log("step: " + insertSort.step + " | i: " + i)
-            insertSortDrawFinishedArea(i)
+            insertSortDrawMarker(i)
             publish(copy, insertSort)
             if (breakAfter) break
         }
     }
-    insertSortDrawFinishedArea(values.length)
+    insertSortDrawMarker(values.length)
     insertSort.svg.size((insertSort.items.length - 1) * 100 + 60, "100%")
 }
 
-function insertSortDrawFinishedArea(i) {
+function insertSortDrawMarker(i) {
     insertSort.svg.rect(100, (i) * 40 + 10)
         .cx((insertSort.step - 1) * 100 + 30)
         .y(0)
@@ -154,16 +154,16 @@ function mergeSortAlgorithm(values) {
                 let copy = copyArray(values)
                 copy[originalA].gotCompared = true
                 copy[originalB].gotCompared = true
-                mergeSortDrawComparisonArea(i, j, a)
+                mergeSortDrawMarker(i, j, a)
                 publish(copy, mergeSort)
             }
         }
     }
-    mergeSortDrawComparisonArea(itemCount, 0, itemCount)
+    mergeSortDrawMarker(itemCount, 0, itemCount)
     mergeSort.svg.size((mergeSort.items.length - 1) * 100 + 60, "100%")
 }
 
-function mergeSortDrawComparisonArea(i, j, a) {
+function mergeSortDrawMarker(i, j, a) {
     if(a < itemCount) {
         let unsortedStartID = a-1
         let unsortedEndID = i * (j + 1) - 1
@@ -220,13 +220,13 @@ function quickSortAlgorithm(values) {
         }
         let a = {start: element.start, end: element.end-offset-1}
         let b = {start: element.end-offset+1, end: element.end}
-        if(a.end-a.start > 1) stack.push(a)
-        if(b.end-b.start > 1) stack.push(b)
+        if(a.end-a.start > 0) stack.push(a)
+        if(b.end-b.start > 0) stack.push(b)
     }
     quickSort.svg.size((quickSort.items.length - 1) * 100 + 60, "100%")
 }
 
-function quickSortDrawComparisonArea(element, offset, i) {
+function quickSortDrawMarker(element, offset, i) {
 
 }
 
