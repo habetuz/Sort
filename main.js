@@ -154,21 +154,29 @@ function mergeSortAlgorithm(values) {
                 let copy = copyArray(values)
                 copy[originalA].gotCompared = true
                 copy[originalB].gotCompared = true
-                mergeSortDrawComparisonArea(i, j)
+                mergeSortDrawComparisonArea(i, j, a)
                 publish(copy, mergeSort)
             }
         }
     }
+    mergeSortDrawComparisonArea(itemCount, 0, itemCount)
     mergeSort.svg.size((mergeSort.items.length - 1) * 100 + 60, "100%")
 }
 
-function mergeSortDrawComparisonArea(i, j) {
-    let startID = i * j
-    let endID = i * (j + 1) - 1
-    if (endID >= itemCount) endID = itemCount - 1
-    let start = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + startID))
-    let end = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + endID))
-    mergeSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({ color: "#4d4d4d", width: 50, linecap: "round" }).back()
+function mergeSortDrawComparisonArea(i, j, a) {
+    if(a < itemCount) {
+        let unsortedStartID = a-1
+        let unsortedEndID = i * (j + 1) - 1
+        if (unsortedEndID >= itemCount) unsortedEndID = itemCount - 1
+        let unsortedStart = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + unsortedStartID))
+        let unsortedEnd = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + unsortedEndID))
+        mergeSort.svg.line(unsortedStart.cx(), unsortedStart.cy(), unsortedEnd.cx(), unsortedEnd.cy()).stroke({ color: "#4d4d4d", width: 50, linecap: "round" }).back()
+    }
+    let sortedStartID = i * j
+    let sortedEndID = a-1
+    let sortedStart = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + sortedStartID))
+    let sortedEnd = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + sortedEndID))
+    if(sortedEndID-sortedStartID > 0) mergeSort.svg.line(sortedStart.cx(), sortedStart.cy(), sortedEnd.cx(), sortedEnd.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
 }
 
 //================================================================================
@@ -193,7 +201,6 @@ function quickSortAlgorithm(values) {
     while(stack.length > 0) {
         let element = stack.shift()
         let offset = 0
-        let changed = false
         for(let i = element.start; i < element.end-offset; i++) {
             let shifted = false
             if(values[i].value > values[element.end-offset].value) {
@@ -209,19 +216,19 @@ function quickSortAlgorithm(values) {
             if(shifted) {
                 i--
                 offset++
-                changed = true
             }
         }
-        if(changed) {
-            let a = {start: element.start, end: element.end-offset-1}
-            let b = {start: element.end-offset+1, end: element.end}
-            if(a.end-a.start > 1) stack.push(a)
-            if(b.end-b.start > 1) stack.push(b)
-        }
+        let a = {start: element.start, end: element.end-offset-1}
+        let b = {start: element.end-offset+1, end: element.end}
+        if(a.end-a.start > 1) stack.push(a)
+        if(b.end-b.start > 1) stack.push(b)
     }
     quickSort.svg.size((quickSort.items.length - 1) * 100 + 60, "100%")
 }
 
+function quickSortDrawComparisonArea(element, offset, i) {
+
+}
 
 //================================================================================
 // Execution
