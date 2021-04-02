@@ -24,11 +24,11 @@ document.getElementById("button-subtractone").addEventListener("click", function
 // Constants and values
 //================================================================================
 
-const MIN_CRICLE_SIZE = 5
+const MIN_CRICLE_SIZE = 8
 const MAX_CRICLE_SIZE = 30
 
-var itemCount = 7
-var runMode = runReverse
+var itemCount = 5
+var runMode = runRandom
 
 //================================================================================
 // Bubble-Sort
@@ -50,9 +50,7 @@ function bubbleSortAlgorithm(values) {
     for(let i = 0; i < values.length; i++) {
         for(let j = 0; j < values.length-1-i; j++) {
             if(values[j].value > values[j+1].value) {
-                let swap = values[j]
-                values[j] = values[j+1]
-                values[j+1] = swap
+                swap(values, j, j+1)
                 
             }
             let copy = copyArray(values)
@@ -90,22 +88,18 @@ function insertSortAlgorithm(values) {
     insertSort.svg.clear()
     insertSort.step = 0
     insertSort.items = []
-    insertSortDrawFinishedArea(0)
     publish(copyArray(values), insertSort)
     for(let i = 1; i < values.length; i++) {
         for(let j = 0; j < i; j++) {
             let breakAfter = false
             if(values[j].value > values[i].value) {
-                let swap = values[i]
-                for (let k = i; k > j; k--) {
-                    values[k] = values[k-1]
-                }
-                values[j] = swap
+                shift(values, i, j)
                 breakAfter = true
             }
             let copy = copyArray(values)
             copy[i].gotCompared = true
             copy[j].gotCompared = true
+            console.log("step: " + insertSort.step + " | i: " + i)
             insertSortDrawFinishedArea(i)
             publish(copy, insertSort)
             if(breakAfter) break
@@ -116,8 +110,8 @@ function insertSortAlgorithm(values) {
 }
 
 function insertSortDrawFinishedArea(i) {
-    insertSort.svg.rect(100, (i+1)*40 +10)
-        .cx((insertSort.step)*100 + 30)
+    insertSort.svg.rect(100, (i)*40 +10)
+        .cx((insertSort.step-1)*100 + 30)
         .y(0)
         .fill("#546653")
         .back()
@@ -151,12 +145,7 @@ function mergeSortAlgorithm(values) {
                 if(values[a].value<values[b].value) {
                     a++
                 } else {
-                    let swap
-                    swap = values[b]
-                    for(let l = b; l > a; l--) {
-                        values[l] = values[l-1]
-                    }
-                    values[a] = swap
+                    shift(values, b, a)
                     a++
                     b++
                     //console.log(values)
@@ -179,7 +168,7 @@ function mergeSortDrawComparisonArea(i, j) {
     if(endID >= itemCount) endID = itemCount-1
     let start = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step-1) + "-" + startID))
     let end = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step-1) + "-" + endID))
-    mergeSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#4d4d4d", width: 35, linecap: "round"}).back()
+    mergeSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#4d4d4d", width: 50, linecap: "round"}).back()
 }
 
 //================================================================================
@@ -221,6 +210,27 @@ function runAlgorithms(array) {
 //================================================================================
 // Helper functions
 //================================================================================
+
+function swap(array, a, b) {
+    let swap = array[a]
+    array[a] = array[b]
+    array[b] = swap
+    return array
+}
+
+function shift(array, from, to) {
+    let swap = array[from]
+    if(from > to) {
+        for(let i = from; i > to; i--) {
+            array[i] = array[i-1]
+        }
+    } else {
+        for(let i = from; i < to; i++) {
+            array[i] = array[i+1]
+        }
+    }
+    array[to] = swap
+}
 
 function copyArray(array) {
     let copy = array.slice()
