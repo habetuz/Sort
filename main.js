@@ -48,10 +48,11 @@ function bubbleSortAlgorithm(values) {
     bubbleSort.items = []
     publish(copyArray(values), bubbleSort)
     for (let i = 0; i < values.length; i++) {
+        let changed = false
         for (let j = 0; j < values.length - 1 - i; j++) {
             if (values[j].value > values[j + 1].value) {
                 swap(values, j, j + 1)
-
+                changed = true
             }
             let copy = copyArray(values)
             copy[j].gotCompared = true
@@ -59,6 +60,7 @@ function bubbleSortAlgorithm(values) {
             bubbleSortDrawMarker(i)
             publish(copy, bubbleSort)
         }
+        if(!changed) break
     }
     bubbleSortDrawMarker(values.length)
     bubbleSort.svg.size((bubbleSort.items.length - 1) * 100 + 60, "100%")
