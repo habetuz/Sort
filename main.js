@@ -4,20 +4,20 @@ import { SVG } from './svg.js'
 // Event listener
 //================================================================================
 document.getElementById("button-random").addEventListener("click", function () {
-    runMode = runRandom
-    runAgain()
+    arrayGenerator = getRandomArray
+    run()
 })
 document.getElementById("button-reverse").addEventListener("click", function () {
-    runMode = runReverse
-    runAgain()
+    arrayGenerator = getReverseArray
+    run()
 })
 document.getElementById("button-addone").addEventListener("click", function () {
     itemCount++
-    runAgain()
+    run()
 })
 document.getElementById("button-subtractone").addEventListener("click", function () {
     itemCount--
-    runAgain()
+    run()
 })
 
 //================================================================================
@@ -28,7 +28,7 @@ const MIN_CRICLE_SIZE = 8
 const MAX_CRICLE_SIZE = 30
 
 var itemCount = 8
-var runMode = runRandom
+var arrayGenerator = getRandomArray
 
 //================================================================================
 // Bubble-Sort
@@ -261,13 +261,17 @@ function quickSortDrawMarker(element, offset, finished) {
 // Execution
 //================================================================================
 
-runAgain()
+run()
 
-function runAgain() {
-    runMode()
+function run() {
+    console.info("---running again---")
+    let {time, value} = measureExecutionTime(arrayGenerator)
+    console.info("* Array generation took about " + time + "ms")
+    runAlgorithms(value)
+
 }
 
-function runRandom() {
+function getRandomArray() {
     let array = new Array(itemCount)
     for (let i = 0; i < itemCount; i++) {
         let index = getRandom(itemCount)
@@ -277,27 +281,34 @@ function runRandom() {
         }
         array[index] = { value: i }
     }
-    runAlgorithms(array)
+    return array
 }
 
-function runReverse() {
+function getReverseArray() {
     let array = new Array(itemCount)
     for (let i = 0; i < itemCount; i++) {
         array[i] = { value: itemCount - i - 1 }
     }
-    runAlgorithms(array)
+    return array
 }
 
 function runAlgorithms(array) {
-    bubbleSortAlgorithm(copyArray(array))
-    insertSortAlgorithm(copyArray(array))
-    mergeSortAlgorithm(copyArray(array))
-    quickSortAlgorithm(copyArray(array))
+    console.info("* Bubble-Sort took about " + measureExecutionTime(bubbleSortAlgorithm, copyArray(array)).time + "ms")
+    console.info("* Insert-Sort took about " + measureExecutionTime(insertSortAlgorithm, copyArray(array)).time + "ms")
+    console.info("*  Merge-Sort took about " + measureExecutionTime(mergeSortAlgorithm , copyArray(array)).time + "ms")
+    console.info("*  Quick-Sort took about " + measureExecutionTime(quickSortAlgorithm , copyArray(array)).time + "ms")
 }
 
 //================================================================================
 // Helper functions
 //================================================================================
+
+function measureExecutionTime(fun, parameters) {
+    let start = window.performance.now()
+    let returnValue = fun(parameters)
+    let end = window.performance.now()
+    return {time: end-start, value: returnValue}
+}
 
 function swap(array, a, b) {
     let swap = array[a]
