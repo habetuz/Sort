@@ -2,21 +2,21 @@
 <html>
     <header>
         <meta name="color-scheme" content="dark>
-        <meta charset=" utf-8"="">
+        <meta charset=" utf-8>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sort</title>
         <link href="main.css" rel="stylesheet" type="text/css">
     </header>
     <body>
-        <a href="https://sort.marvin-fuchs.de"><img id="title" class="unselectable" src="assets/sort.svg"></a>
+        <a href="https://sort.marvin-fuchs.de"><img id="title" class="unselectable" src="assets/sort.svg" ondragstart="return false;" ></a>
         <div id="buttons">
             <div id="order-buttons" class="button-container">
-                <h3 id="button-random" class="left">Random</h3>
-                <h3 id="button-reverse" class="right">Reverse</h3>
+                <h3 id="button-random" class="left unselectable">Random</h3>
+                <h3 id="button-reverse" class="right unselectable">Reverse</h3>
             </div>
             <div id="item-buttons" class="button-container">
-                <h3 id="button-addone" class="left">+1</h3>
-                <h3 id="button-subtractone" class="right">-1</h3>
+                <h3 id="button-addone" class="left unselectable">+1</h3>
+                <h3 id="button-subtractone" class="right unselectable">-1</h3>
             </div>
         </div>
         <div class="outer-container">
@@ -55,7 +55,7 @@
             <div id="quick-sort" class="inner-container">
             </div>
         </div>
-        <a href="https://marvin-fuchs.de"><img id="marvin-hello" src="https://habetuz.github.io/me/assets/logo_long.svg"></a>
+        <a href="https://marvin-fuchs.de"><img id="marvin-hello" src="https://habetuz.github.io/me/assets/logo_long.svg" ondragstart="return false;" ></a>
         <script type="module" src="main.js"></script>
     </body>
 </html>

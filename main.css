@@ -103,6 +103,7 @@ h3:hover {
     -moz-user-select: none;
     -ms-user-select: none;
 	user-select: none;
+    user-drag: none; 
 }
 
 .link {
