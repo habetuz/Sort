@@ -270,10 +270,11 @@ function runAgain() {
 function runRandom() {
     let array = new Array(itemCount)
     for (let i = 0; i < itemCount; i++) {
-        let index
-        do {
-            index = getRandom(itemCount)
-        } while (array[index] != null)
+        let index = getRandom(itemCount)
+        while (array[index] != null) {
+            index ++
+            if(index >= array.length) index = 0
+        }
         array[index] = { value: i }
     }
     runAlgorithms(array)
