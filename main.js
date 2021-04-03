@@ -19,7 +19,18 @@ document.getElementById("button-subtractone").addEventListener("click", function
     itemCount--
     run()
 })
-
+document.getElementById("bubble-sort-switch").addEventListener("input", function () {
+    toggleAlgorithm(bubbleSortAlgorithm, bubbleSort)
+})
+document.getElementById("insert-sort-switch").addEventListener("input", function () {
+    toggleAlgorithm(insertSortAlgorithm, insertSort)
+})
+document.getElementById("merge-sort-switch").addEventListener("input", function () {
+    toggleAlgorithm(mergeSortAlgorithm, mergeSort)
+})
+document.getElementById("quick-sort-switch").addEventListener("input", function () {
+    toggleAlgorithm(quickSortAlgorithm, quickSort)
+})
 //================================================================================
 // Constants and values
 //================================================================================
@@ -29,6 +40,13 @@ const MAX_CRICLE_SIZE = 30
 
 var itemCount = 8
 var arrayGenerator = getRandomArray
+var latestValues
+var algorithms = [
+    bubbleSortAlgorithm,
+    insertSortAlgorithm,
+    mergeSortAlgorithm,
+    quickSortAlgorithm
+]
 
 //================================================================================
 // Bubble-Sort
@@ -261,11 +279,13 @@ function quickSortDrawMarker(element, offset, finished) {
 // Execution
 //================================================================================
 
+document.getElementsByTagName("input").forEach(element => {element.checked = true})
 run()
 
 function run() {
     console.info("---running again---")
     let {time, value} = measureExecutionTime(arrayGenerator)
+    latestValues = value
     console.info("* Array generation took about " + time + "ms")
     runAlgorithms(value)
 
@@ -299,15 +319,40 @@ function getReverseArray() {
 }
 
 function runAlgorithms(array) {
+    algorithms.forEach(algorithm => {
+        algorithm(copyArray(array))
+    });
+    /*
     console.info("* Bubble-Sort took about " + measureExecutionTime(bubbleSortAlgorithm, copyArray(array)).time + "ms")
     console.info("* Insert-Sort took about " + measureExecutionTime(insertSortAlgorithm, copyArray(array)).time + "ms")
     console.info("*  Merge-Sort took about " + measureExecutionTime(mergeSortAlgorithm , copyArray(array)).time + "ms")
     console.info("*  Quick-Sort took about " + measureExecutionTime(quickSortAlgorithm , copyArray(array)).time + "ms")
+    */
 }
 
 //================================================================================
 // Helper functions
 //================================================================================
+
+function toggleAlgorithm(algorithm, item) {
+    if(algorithms.includes(algorithm)) {
+        removeItem(algorithms, algorithm)
+        item.svg.rect(item.svg.width(), item.svg.height()).fill("#00000080")
+
+    }
+    else {
+        algorithms.push(algorithm)
+        algorithm(latestValues)
+    }
+}
+
+function removeItem(array, item) {
+    var index = array.indexOf(item);
+    if (index > -1) {
+      array.splice(index, 1);
+    }
+    return array;
+  }
 
 function measureExecutionTime(fun, parameters) {
     let start = window.performance.now()
