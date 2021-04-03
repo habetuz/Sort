@@ -342,7 +342,7 @@ function toggleAlgorithm(algorithm, item) {
     }
     else {
         algorithms.push(algorithm)
-        algorithm(latestValues)
+        algorithm(copyArray(latestValues))
     }
 }
 
