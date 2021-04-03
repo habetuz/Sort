@@ -204,7 +204,7 @@ function quickSortAlgorithm(values) {
     stack.push({start: 0, end: values.length-1})
     publish(copyArray(values), quickSort)
     while(stack.length > 0) {
-        let element = stack.shift()
+        let element = stack.pop()
         let offset = 0
         for(let i = element.start; i < element.end-offset; i++) {
             let shifted = false
