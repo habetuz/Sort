@@ -274,11 +274,17 @@ function run() {
 function getRandomArray() {
     let array = new Array(itemCount)
     for (let i = 0; i < itemCount; i++) {
+        /*
         let index = getRandom(itemCount)
         while (array[index] != null) {
             index ++
             if(index >= array.length) index = 0
         }
+        */
+       let index
+       do {
+           index = getRandom(itemCount)
+       } while(array[index] != null)
         array[index] = { value: i }
     }
     return array
