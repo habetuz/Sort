@@ -111,11 +111,11 @@ function insertSortAlgorithm(values) {
 }
 
 function insertSortDrawMarker(i) {
-    insertSort.svg.rect(100, (i) * 40 + 10)
-        .cx((insertSort.step - 1) * 100 + 30)
-        .y(0)
-        .fill("#546653")
-        .back()
+    let startID = 0
+    let endID = i-1
+    let start = SVG(document.getElementById(insertSort.idPrefix + (insertSort.step - 1) + "-" + startID))
+    let end = SVG(document.getElementById(insertSort.idPrefix + (insertSort.step - 1) + "-" + endID))
+    insertSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
 }
 
 //================================================================================
