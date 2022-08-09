@@ -123,13 +123,17 @@ h3:hover {
     width: 250px;
 }
 
-#marvin-hello {
+#website_link {
     text-align: center;
     display: block;
-    width: 200px;
+    width: 150px;
+    height: 150px;
     margin: auto;
     margin-top: 100px;
-    margin-bottom: 50px;
+    background-color: #E8911A;
+
+    -webkit-mask: url(https://hello.marvin-fuchs.de/assets/Icon.svg) no-repeat center;
+    mask: url(https://hello.marvin-fuchs.de/assets/Icon.svg) no-repeat center;
 }
 
 /*Toggle switch from https://www.w3schools.com/howto/howto_css_switch.asp*/
