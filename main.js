@@ -1,10 +1,8 @@
-// Add the url copied from step 2 here
 SHEETS_TRACKING.sheetsURL = "https://script.google.com/macros/s/AKfycbyCUxU91LZl7Chs0017YWMvYvEUzoOBcVxznNIRGu_D8F1K2Nhd5fLFi1V5xUQN8P1R/exec"
 
-// Add the name of your spreadsheet here
 SHEETS_TRACKING.sheetName = "Sort"
 SHEETS_TRACKING.start()
-
+document.addEventListener('mouseup', SHEETS_TRACKING.registerLinkClick)
 
 import { SVG } from './svg.js'
 
