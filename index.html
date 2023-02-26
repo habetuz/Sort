@@ -1,61 +1,65 @@
 <!DOCTYPE html>
 <html>
-    <header>
-        <meta name="color-scheme" content="dark>
+<header>
+    <meta name="color-scheme" content="dark>
         <meta charset=" utf-8>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sort</title>
-        <link href="main.css" rel="stylesheet" type="text/css">
-    </header>
-    <body>
-        <a href="https://sort.marvin-fuchs.de"><img id="title" class="unselectable" src="assets/sort.svg" ondragstart="return false;" ></a>
-        <div id="buttons">
-            <div id="order-buttons" class="button-container">
-                <h3 id="button-random" class="left unselectable">Random</h3>
-                <h3 id="button-reverse" class="right unselectable">Reverse</h3>
-            </div>
-            <div id="item-buttons" class="button-container">
-                <h3 id="button-addone" class="left unselectable">+1</h3>
-                <h3 id="button-subtractone" class="right unselectable">-1</h3>
-            </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sort</title>
+    <link href="main.css" rel="stylesheet" type="text/css">
+</header>
+
+<body>
+    <a href="https://sort.marvin-fuchs.de"><img id="title" class="unselectable" src="assets/sort.svg"
+            ondragstart="return false;"></a>
+    <div id="buttons">
+        <div id="order-buttons" class="button-container">
+            <h3 id="button-random" class="left unselectable">Random</h3>
+            <h3 id="button-reverse" class="right unselectable">Reverse</h3>
         </div>
-        <div class="outer-container">
-            <h2>Bubble-Sort</h2>
-            <label class="switch">
-                <input id="bubble-sort-switch" type="checkbox" checked>
-                <span class="slider round"></span>
-              </label>
-            <div id="bubble-sort" class="inner-container">
-            </div>
+        <div id="item-buttons" class="button-container">
+            <h3 id="button-addone" class="left unselectable">+1</h3>
+            <h3 id="button-subtractone" class="right unselectable">-1</h3>
         </div>
-        <div class="outer-container">
-            <h2>Insert-Sort</h2>
-            <label class="switch">
-                <input id="insert-sort-switch" type="checkbox" checked>
-                <span class="slider round"></span>
-              </label>
-            <div id="insert-sort" class="inner-container">
-            </div>
+    </div>
+    <div class="outer-container">
+        <h2>Bubble-Sort</h2>
+        <label class="switch">
+            <input id="bubble-sort-switch" type="checkbox" checked>
+            <span class="slider round"></span>
+        </label>
+        <div id="bubble-sort" class="inner-container">
         </div>
-        <div class="outer-container">
-            <h2>Merge-Sort</h2>
-            <label class="switch">
-                <input id="merge-sort-switch" type="checkbox" checked>
-                <span class="slider round"></span>
-              </label>
-            <div id="merge-sort" class="inner-container">
-            </div>
+    </div>
+    <div class="outer-container">
+        <h2>Insert-Sort</h2>
+        <label class="switch">
+            <input id="insert-sort-switch" type="checkbox" checked>
+            <span class="slider round"></span>
+        </label>
+        <div id="insert-sort" class="inner-container">
         </div>
-        <div class="outer-container">
-            <h2>Quick-Sort</h2>
-            <label class="switch">
-                <input id="quick-sort-switch" type="checkbox" checked>
-                <span class="slider round"></span>
-              </label>
-            <div id="quick-sort" class="inner-container">
-            </div>
+    </div>
+    <div class="outer-container">
+        <h2>Merge-Sort</h2>
+        <label class="switch">
+            <input id="merge-sort-switch" type="checkbox" checked>
+            <span class="slider round"></span>
+        </label>
+        <div id="merge-sort" class="inner-container">
         </div>
-        <a id="website_link" href="https://marvin-fuchs.de"></a>
-        <script type="module" src="main.js"></script>
-    </body>
+    </div>
+    <div class="outer-container">
+        <h2>Quick-Sort</h2>
+        <label class="switch">
+            <input id="quick-sort-switch" type="checkbox" checked>
+            <span class="slider round"></span>
+        </label>
+        <div id="quick-sort" class="inner-container">
+        </div>
+    </div>
+    <a id="website_link" href="https://marvin-fuchs.de"></a>
+    <script src="https://cdn.jsdelivr.net/gh/habetuz/sheets_tracking@1.0.2/sheets_tracking.js"></script>
+    <script type="module" src="main.js"></script>
+</body>
+
 </html>

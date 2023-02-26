@@ -1,3 +1,11 @@
+// Add the url copied from step 2 here
+SHEETS_TRACKING.sheetsURL = "https://script.google.com/macros/s/AKfycbyCUxU91LZl7Chs0017YWMvYvEUzoOBcVxznNIRGu_D8F1K2Nhd5fLFi1V5xUQN8P1R/exec"
+
+// Add the name of your spreadsheet here
+SHEETS_TRACKING.sheetName = "Sort"
+SHEETS_TRACKING.start()
+
+
 import { SVG } from './svg.js'
 
 //================================================================================
@@ -78,16 +86,16 @@ function bubbleSortAlgorithm(values) {
             bubbleSortDrawMarker(i)
             publish(copy, bubbleSort)
         }
-        if(!changed) break
+        if (!changed) break
     }
     bubbleSortDrawMarker(values.length)
     bubbleSort.svg.size((bubbleSort.items.length - 1) * 100 + 60, "100%")
 }
 
 function bubbleSortDrawMarker(i) {
-    let startID = itemCount-1
-    let endID = itemCount -i
-    if(startID-endID < 0) return
+    let startID = itemCount - 1
+    let endID = itemCount - i
+    if (startID - endID < 0) return
     let start = SVG(document.getElementById(bubbleSort.idPrefix + (bubbleSort.step - 1) + "-" + startID))
     let end = SVG(document.getElementById(bubbleSort.idPrefix + (bubbleSort.step - 1) + "-" + endID))
     bubbleSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
@@ -132,7 +140,7 @@ function insertSortAlgorithm(values) {
 
 function insertSortDrawMarker(i) {
     let startID = 0
-    let endID = i-1
+    let endID = i - 1
     let start = SVG(document.getElementById(insertSort.idPrefix + (insertSort.step - 1) + "-" + startID))
     let end = SVG(document.getElementById(insertSort.idPrefix + (insertSort.step - 1) + "-" + endID))
     insertSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
@@ -185,8 +193,8 @@ function mergeSortAlgorithm(values) {
 }
 
 function mergeSortDrawMarker(i, j, a) {
-    if(a < itemCount) {
-        let unsortedStartID = a-1
+    if (a < itemCount) {
+        let unsortedStartID = a - 1
         let unsortedEndID = i * (j + 1) - 1
         if (unsortedEndID >= itemCount) unsortedEndID = itemCount - 1
         let unsortedStart = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + unsortedStartID))
@@ -194,8 +202,8 @@ function mergeSortDrawMarker(i, j, a) {
         mergeSort.svg.line(unsortedStart.cx(), unsortedStart.cy(), unsortedEnd.cx(), unsortedEnd.cy()).stroke({ color: "#4d4d4d", width: 50, linecap: "round" }).back()
     }
     let sortedStartID = i * j
-    let sortedEndID = a-1
-    if(sortedEndID-sortedStartID <= 0) return
+    let sortedEndID = a - 1
+    if (sortedEndID - sortedStartID <= 0) return
     let sortedStart = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + sortedStartID))
     let sortedEnd = SVG(document.getElementById(mergeSort.idPrefix + (mergeSort.step - 1) + "-" + sortedEndID))
     mergeSort.svg.line(sortedStart.cx(), sortedStart.cy(), sortedEnd.cx(), sortedEnd.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
@@ -219,59 +227,59 @@ function quickSortAlgorithm(values) {
     quickSort.items = []
     let stack = []
     let finished = []
-    stack.push({start: 0, end: values.length-1})
+    stack.push({ start: 0, end: values.length - 1 })
     publish(copyArray(values), quickSort)
-    while(stack.length > 0) {
+    while (stack.length > 0) {
         let element = stack.pop()
         let offset = 0
-        for(let i = element.start; i < element.end-offset; i++) {
+        for (let i = element.start; i < element.end - offset; i++) {
             let shifted = false
-            if(values[i].value > values[element.end-offset].value) {
-                shift(values, i, element.end-offset)
+            if (values[i].value > values[element.end - offset].value) {
+                shift(values, i, element.end - offset)
                 shifted = true
             } else {
 
             }
             let copy = copyArray(values)
             copy[i].gotCompared = true
-            copy[element.end-offset].gotCompared = true
+            copy[element.end - offset].gotCompared = true
             publish(copy, quickSort)
             quickSortDrawMarker(element, offset, finished)
-            if(shifted) {
+            if (shifted) {
                 i--
                 offset++
             }
         }
-        let a = {start: element.start, end: element.end-offset-1}
-        let b = {start: element.end-offset+1, end: element.end}
-        if(a.end-a.start > 0)       stack.push(a) 
-        else if(a.end-a.start == 0) finished.push(a.end) 
-        if(b.end-b.start > 0)       stack.push(b) 
-        else                        finished.push(b.end) 
-        finished.push(element.end-offset)
+        let a = { start: element.start, end: element.end - offset - 1 }
+        let b = { start: element.end - offset + 1, end: element.end }
+        if (a.end - a.start > 0) stack.push(a)
+        else if (a.end - a.start == 0) finished.push(a.end)
+        if (b.end - b.start > 0) stack.push(b)
+        else finished.push(b.end)
+        finished.push(element.end - offset)
     }
-    let start = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-1) + "-" + 0))
-    let end = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-1) + "-" + (itemCount-1)))
-    quickSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#546653", width: 50, linecap:  "round"}).back()
+    let start = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step - 1) + "-" + 0))
+    let end = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step - 1) + "-" + (itemCount - 1)))
+    quickSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
     quickSort.svg.size((quickSort.items.length - 1) * 100 + 60, "100%")
 }
 
 function quickSortDrawMarker(element, offset, finished) {
     let pivotID = element.end - offset
-    let pivot = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + pivotID))
+    let pivot = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step - 2) + "-" + pivotID))
     quickSort.svg.circle(50).fill("#383838").cx(pivot.cx()).cy(pivot.cy()).back()
-    
-    let start = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + element.start))
-    let end = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + element.end))
-    quickSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({color: "#4d4d4d", width: 50, linecap:  "round"}).back()
+
+    let start = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step - 2) + "-" + element.start))
+    let end = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step - 2) + "-" + element.end))
+    quickSort.svg.line(start.cx(), start.cy(), end.cx(), end.cy()).stroke({ color: "#4d4d4d", width: 50, linecap: "round" }).back()
 
     finished.forEach(item => {
-        let finishedStartID = (item-1 >= 0 && item == element.end+1) || finished.includes(item-1) ? item-1 : item
-        let finishedEndID = (item+1 < itemCount && item == element.start-1) || finished.includes(item+1) ? item+1 : item
+        let finishedStartID = (item - 1 >= 0 && item == element.end + 1) || finished.includes(item - 1) ? item - 1 : item
+        let finishedEndID = (item + 1 < itemCount && item == element.start - 1) || finished.includes(item + 1) ? item + 1 : item
         //console.log("start id: " + finishedStartID + " | end id: " + finishedEndID + " | item: " + item)
-        let finishedStart = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + finishedStartID))
-        let finishedEnd = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step-2) + "-" + finishedEndID))
-        quickSort.svg.line(finishedStart.cx(), finishedStart.cy(), finishedEnd.cx(), finishedEnd.cy()).stroke({color: "#546653", width: 50, linecap:  "round"}).back()
+        let finishedStart = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step - 2) + "-" + finishedStartID))
+        let finishedEnd = SVG(document.getElementById(quickSort.idPrefix + (quickSort.step - 2) + "-" + finishedEndID))
+        quickSort.svg.line(finishedStart.cx(), finishedStart.cy(), finishedEnd.cx(), finishedEnd.cy()).stroke({ color: "#546653", width: 50, linecap: "round" }).back()
     });
 }
 
@@ -279,12 +287,12 @@ function quickSortDrawMarker(element, offset, finished) {
 // Execution
 //================================================================================
 
-document.getElementsByTagName("input").forEach(element => {element.checked = true})
+document.getElementsByTagName("input").forEach(element => { element.checked = true })
 run()
 
 function run() {
     console.info("---running again---")
-    let {time, value} = measureExecutionTime(arrayGenerator)
+    let { time, value } = measureExecutionTime(arrayGenerator)
     latestValues = value
     console.info("* Array generation took about " + time + "ms")
     runAlgorithms(value)
@@ -301,10 +309,10 @@ function getRandomArray() {
             if(index >= array.length) index = 0
         }
         */
-       let index
-       do {
-           index = getRandom(itemCount)
-       } while(array[index] != null)
+        let index
+        do {
+            index = getRandom(itemCount)
+        } while (array[index] != null)
         array[index] = { value: i }
     }
     return array
@@ -335,7 +343,7 @@ function runAlgorithms(array) {
 //================================================================================
 
 function toggleAlgorithm(algorithm, item) {
-    if(algorithms.includes(algorithm)) {
+    if (algorithms.includes(algorithm)) {
         removeItem(algorithms, algorithm)
         item.svg.rect(item.svg.width(), item.svg.height()).fill("#00000080")
 
@@ -349,16 +357,16 @@ function toggleAlgorithm(algorithm, item) {
 function removeItem(array, item) {
     var index = array.indexOf(item);
     if (index > -1) {
-      array.splice(index, 1);
+        array.splice(index, 1);
     }
     return array;
-  }
+}
 
 function measureExecutionTime(fun, parameters) {
     let start = window.performance.now()
     let returnValue = fun(parameters)
     let end = window.performance.now()
-    return {time: end-start, value: returnValue}
+    return { time: end - start, value: returnValue }
 }
 
 function swap(array, a, b) {
